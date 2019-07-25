@@ -1,0 +1,86 @@
+﻿@model GitApp1.Models.GitHub
+
+@{
+    ViewData["Title"] = "GitHub License Fixer";
+}
+
+<script type="text/javascript">
+    function RequestLicense(repo)
+    {
+        var xmlhttp = new XMLHttpRequest();
+
+        xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == XMLHttpRequest.DONE)
+        {   // XMLHttpRequest.DONE == 4
+            if (xmlhttp.status == 200)
+                if (xmlhttp.responseText == "OK")             
+                    alert("License Request Made");
+                else
+                    alert("Error Requesting License");
+            else
+                alert("Error Requesting License");
+        }
+    };
+    xmlhttp.open("GET", "/Repository/License?repo=" + repo, true);
+    xmlhttp.send();
+}
+</script>
+
+<h2>Repository License Fixer</h2>
+<form method="post">
+    <div>
+        <label>Search Organization:</label>
+        <input name="searchFor" />
+        <button type="submit">Search</button>
+    </div>
+
+    <div>
+        <table border="1">
+            <thead>
+                <tr>
+                    <td>Repository</td>
+                    <td>License</td>
+                </tr>
+            </thead>
+            @if (Model.Repositories != null)
+            {
+                @foreach (var r in Model.Repositories)
+                {
+                    <tr>
+                        <td>@r.name</td>
+                        @if (r.valid)
+                        {
+                            <td>@r.license</td>
+                        }
+                        else
+                        {
+                            <td>
+                            @if (r.full_name != null)
+                            {
+                                <button type="button" onclick="RequestLicense('@r.full_name')">Request License</button>
+                            }
+                            </td>
+                        }
+                    </tr>
+                }
+            }
+
+        </table>
+    </div>
+</form>
+
+<div>
+    <br />
+    <label>Search Requests Remaining:</label> @ViewBag.Remaining
+</div>
+
+<div style='display:@(ViewBag.Remaining<2?"block":"none")'>
+    <br />
+    <label>Timeout Minutes Remaining:</label>
+    @if (ViewBag.Remaining < 2)
+    {
+        @Html.Partial("~/Views/Shared/Loading.cshtml")
+    }
+</div>
+
+

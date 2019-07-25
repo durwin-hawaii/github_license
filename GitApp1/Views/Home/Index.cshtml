@@ -1,0 +1,38 @@
+﻿@model GitHub
+
+@{
+    ViewData["Title"] = "GitHub License Fixer";
+}
+
+<form method="post">
+    <div>
+        <label>Search Organization:</label>
+        <input name="searchFor" />
+    </div>
+    <div>
+        <!-- button type="submit" class="btn btn-default" name="search">Active Search</!--button-->
+        <button type="submit">Search</button>
+    </div>
+</form>
+
+<table>
+    <thead>
+        <tr>
+            <td>Repository</td>
+            <td>License</td>
+        </tr>
+    </thead>
+        @if (Model.Repositories != null)
+        {
+            @foreach(var r in Model.Repositories)
+            {
+                <tr>
+                    <td>@r.name</td>
+                    <td>@r.license</td>
+                </tr>
+            }
+       }
+
+</table>
+   
+
