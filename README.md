@@ -1,4 +1,5 @@
 This projects searches github repositories looking for repositories that do not have a license.
+This code was written in DotNet Core (2.0).
 
 There is an option to send a request to the repository owner to create a license.
 To enable this option you need to input your authorization token to the token member of the GitHub class
